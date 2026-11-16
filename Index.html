@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Herbalia | Herbal Plant Encyclopedia</title>
+<meta name="description" content="Explore medicinal plants, traditional uses, botanical facts, growing tips and herbal health awareness.">
+<style>
+:root{--green:#245b42;--deep:#163b2d;--lime:#dcebd7;--cream:#f7f8f0;--white:#fff;--muted:#78877b;--line:#e6ebdf;--gold:#c79b48}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,"Segoe UI",Arial,sans-serif;background:var(--cream);color:#20372a}
+button,input{font:inherit}
+button{cursor:pointer}
+.layout{min-height:100vh}
+.sidebar{position:fixed;inset:0 auto 0 0;width:245px;background:var(--deep);color:white;padding:25px 18px;z-index:10;display:flex;flex-direction:column}
+.brand{display:flex;gap:12px;align-items:center;padding:4px 9px 32px}
+.logo{width:43px;height:43px;border-radius:14px;background:#d9ebd1;color:var(--deep);display:grid;place-items:center;font-size:25px}
+.brand h2{font-size:21px;letter-spacing:.3px}.brand small{font-size:10px;color:#b8cfbd;letter-spacing:1.5px}
+.nav-title{font-size:10px;letter-spacing:1.8px;color:#91ad98;padding:10px 12px}
+.nav button{width:100%;border:0;background:transparent;color:#c4d5c7;padding:13px 14px;border-radius:11px;text-align:left;margin:3px 0;display:flex;gap:13px;align-items:center;font-size:13px;transition:.2s}
+.nav button:hover,.nav button.active{background:#315943;color:white}
+.nav button.active{border-left:3px solid #c5e2b9}
+.nav-icon{font-size:18px;width:22px;text-align:center}
+.side-note{margin-top:auto;background:#254b37;padding:15px;border-radius:13px;color:#c9ddcd;font-size:11px;line-height:1.7}
+.side-note b{display:block;color:white;margin-bottom:5px}
+.main{margin-left:245px;padding:27px 34px 35px;max-width:1600px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:24px}
+.topbar h1{font-size:24px}.topbar p{font-size:12px;color:var(--muted);margin-top:5px}
+.top-actions{display:flex;gap:10px;align-items:center}
+.search{width:235px;border:1px solid var(--line);border-radius:11px;padding:12px 14px;background:white;outline:none}
+.search:focus{border-color:var(--green)}
+.avatar{height:39px;width:39px;border-radius:50%;background:var(--lime);display:grid;place-items:center;color:var(--green);font-weight:800}
+.mobile-menu{display:none;border:0;background:white;padding:10px;border-radius:9px}
+.page{display:none;animation:fade .3s ease}.page.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.hero{border-radius:22px;padding:34px;background:linear-gradient(115deg,#183e2d,#477653);color:white;display:flex;align-items:center;justify-content:space-between;gap:20px;overflow:hidden;position:relative}
+.hero:after{content:"";position:absolute;width:270px;height:270px;border:35px solid #ffffff12;border-radius:50%;right:10%;top:-115px}
+.hero-copy{max-width:610px;position:relative;z-index:1}
+.eyebrow{font-size:10px;letter-spacing:2px;color:#d6ebc8;font-weight:800}
+.hero h2{font-size:clamp(27px,3.5vw,41px);line-height:1.16;margin:13px 0}
+.hero p{font-size:13px;line-height:1.8;color:#e1eee2;max-width:550px}
+.hero-art{font-size:105px;position:relative;z-index:1;padding:10px 25px;filter:drop-shadow(0 12px 15px #0003)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:21px}
+.btn{border:0;padding:12px 17px;border-radius:10px;font-size:12px;font-weight:800}
+.btn-green{background:#dcebd7;color:#1c4932}.btn-white{background:white;color:var(--deep)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}
+.stat{background:white;border:1px solid var(--line);border-radius:15px;padding:17px;display:flex;align-items:center;gap:12px}
+.stat-icon{width:42px;height:42px;border-radius:12px;background:#edf5e9;display:grid;place-items:center;font-size:20px}
+.stat strong{display:block;font-size:21px}.stat small{font-size:10px;color:var(--muted)}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:27px 0 14px}
+.section-head h2{font-size:19px}.section-head p{font-size:12px;color:var(--muted);margin-top:5px}
+.link-btn{background:none;border:0;color:var(--green);font-weight:800;font-size:12px}
+.plant-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.plant-card{background:white;border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:.22s;cursor:pointer}
+.plant-card:hover{transform:translateY(-5px);box-shadow:0 13px 28px #193c2714}
+.plant-img{height:155px;width:100%;object-fit:cover;background:#e5eee0;display:block}
+.plant-body{padding:15px}
+.category{font-size:9px;letter-spacing:1px;color:#54805b;font-weight:800;text-transform:uppercase}
+.plant-body h3{font-size:17px;margin:6px 0 3px}
+.scientific{font-size:11px;color:#89968a;font-style:italic}
+.plant-body p{font-size:11px;color:#65766a;line-height:1.6;margin-top:10px;min-height:36px}
+.plant-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+.plant-bottom span{font-size:10px;color:var(--green);font-weight:800}
+.plant-bottom button{border:0;background:#edf5e9;color:var(--green);padding:8px 10px;border-radius:8px;font-size:10px;font-weight:800}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 18px}
+.filter{border:1px solid var(--line);background:white;color:#647669;border-radius:30px;padding:9px 13px;font-size:11px}
+.filter.active{background:var(--green);color:white;border-color:var(--green)}
+.panel{background:white;border:1px solid var(--line);border-radius:16px;padding:20px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:18px}
+.panel h3{font-size:16px}.panel p{font-size:12px;line-height:1.8;color:#697a6c;margin-top:9px}
+.tip-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+.tip{background:white;border:1px solid var(--line);border-radius:15px;padding:18px}
+.tip .emoji{font-size:26px}.tip b{display:block;margin:9px 0 6px;font-size:13px}
+.tip p{font-size:11px;line-height:1.7;color:var(--muted)}
+.feature{background:#eaf2e5;border:1px solid #dbe8d5;border-radius:17px;padding:23px}
+.feature h3{font-size:18px;color:var(--deep)}.feature p{font-size:12px;line-height:1.8;color:#617365;margin-top:8px}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.modal{position:fixed;inset:0;background:#10251dcc;z-index:30;display:none;place-items:center;padding:18px}
+.modal.show{display:grid}
+.modal-box{background:white;border-radius:19px;max-width:540px;width:100%;max-height:90vh;overflow:auto;position:relative}
+.modal-img{width:100%;height:210px;object-fit:cover}
+.modal-content{padding:22px}
+.modal-content h2{font-size:25px;margin:5px 0}
+.modal-content .scientific{font-size:12px}
+.modal-content p{font-size:12px;line-height:1.75;color:#627365;margin-top:12px}
+.modal-content h3{font-size:13px;color:var(--green);margin-top:16px}
+.close{position:absolute;right:13px;top:13px;border:0;background:white;border-radius:50%;width:34px;height:34px;font-size:17px}
+.empty{display:none;text-align:center;color:var(--muted);padding:25px;font-size:13px}
+.footer{border-top:1px solid var(--line);margin-top:30px;padding-top:18px;display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:10px}
+@media(max-width:1050px){.plant-grid{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:740px){
+ .sidebar{transform:translateX(-100%);transition:.25s}.sidebar.open{transform:translateX(0)}
+ .main{margin:0;padding:18px}.mobile-menu{display:block}
+ .topbar{align-items:flex-start}.topbar h1{font-size:20px}.top-actions{width:100%}
+ .topbar{flex-wrap:wrap}.search{flex:1;width:100%}.hero{padding:24px}.hero-art{font-size:68px}
+ .two-col,.about-grid{grid-template-columns:1fr}
+}
+@media(max-width:480px){.plant-grid{grid-template-columns:1fr 1fr;gap:10px}.plant-img{height:120px}.plant-body{padding:11px}.plant-body h3{font-size:14px}.plant-body p{font-size:10px}.stats{gap:9px}.stat{padding:12px}.stat strong{font-size:18px}.hero-art{display:none}.tip-grid{grid-template-columns:1fr}.footer{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+ <div class="brand"><div class="logo">🌿</div><div><h2>Herbalia</h2><small>PLANT ENCYCLOPEDIA</small></div></div>
+ <div class="nav-title">EXPLORE</div>
+ <nav class="nav">
+  <button class="active" data-page="dashboard"><span class="nav-icon">▦</span>Dashboard</button>
+  <button data-page="plants"><span class="nav-icon">🌱</span>All Plants</button>
+  <button data-page="categories"><span class="nav-icon">🍃</span>Plant Categories</button>
+  <button data-page="growing"><span class="nav-icon">🪴</span>Growing Guide</button>
+  <button data-page="safety"><span class="nav-icon">🛡️</span>Safety Awareness</button>
+  <button data-page="about"><span class="nav-icon">ⓘ</span>About Project</button>
+ </nav>
+ <div class="side-note"><b>🌍 Nature is our heritage</b>Discover traditional plant knowledge and learn to respect nature through responsible awareness.</div>
+</aside>
+
+<main class="main">
+<header class="topbar">
+ <div style="display:flex;align-items:center;gap:12px">
+  <button class="mobile-menu" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+  <div><h1 id="pageTitle">Botanical Dashboard</h1><p>Discover the world of medicinal and herbal plants</p></div>
+ </div>
+ <div class="top-actions"><input class="search" id="search" placeholder="⌕  Search herbal plants..." aria-label="Search plants"><div class="avatar">H</div></div>
+</header>
+
+<section class="page active" id="dashboard">
+ <div class="hero">
+  <div class="hero-copy"><div class="eyebrow">EXPLORE NATURE'S GREEN LIBRARY</div>
+   <h2>Discover the Power<br>of Herbal Plants.</h2>
+   <p>Explore a collection of well-known herbal plants, their botanical details, traditional uses, growing conditions and important safety information.</p>
+   <div class="actions"><button class="btn btn-green" onclick="showPage('plants')">Explore Plants →</button><button class="btn btn-white" onclick="showPage('growing')">Growing Guide</button></div>
+  </div>
+  <div class="hero-art">🌿</div>
+ </div>
+ <div class="stats">
+  <div class="stat"><div class="stat-icon">🌱</div><div><strong>20+</strong><small>Herbal Plants</small></div></div>
+  <div class="stat"><div class="stat-icon">🍃</div><div><strong>5</strong><small>Plant Categories</small></div></div>
+  <div class="stat"><div class="stat-icon">📖</div><div><strong>20+</strong><small>Plant Profiles</small></div></div>
+  <div class="stat"><div class="stat-icon">🌍</div><div><strong>1 Goal</strong><small>Nature Awareness</small></div></div>
+ </div>
+ <div class="section-head"><div><h2>Featured Herbal Plants</h2><p>Start exploring some popular plants.</p></div><button class="link-btn" onclick="showPage('plants')">View all →</button></div>
+ <div class="plant-grid" id="featured"></div>
+ <div class="two-col">
+  <div class="feature"><h3>🌿 Why learn about herbal plants?</h3><p>Herbal plants are part of traditional knowledge, food culture, gardening and biodiversity. Learning about them helps us appreciate nature and understand the importance of responsible plant use.</p></div>
+  <div class="feature"><h3>🔎 Learn before you use</h3><p>Traditional use does not prove that a plant treats or cures a disease. Correct identification, dosage, preparation and safety matter. Some herbs can cause side effects or interact with medicines.</p></div>
+ </div>
+</section>
+
+<section class="page" id="plants">
+ <div class="section-head"><div><h2>Herbal Plant Collection</h2><p>Explore plant profiles and botanical information.</p></div></div>
+ <div class="filters" id="filters">
+  <button class="filter active" data-category="All">All Plants</button>
+  <button class="filter" data-category="Medicinal">Medicinal</button>
+  <button class="filter" data-category="Aromatic">Aromatic</button>
+  <button class="filter" data-category="Culinary">Culinary</button>
+  <button class="filter" data-category="Garden">Garden</button>
+  <button class="filter" data-category="Traditional">Traditional</button>
+ </div>
+ <div class="plant-grid" id="allPlants"></div>
+ <div class="empty" id="empty">No plants match your search.</div>
+</section>
+
+<section class="page" id="categories">
+ <div class="section-head"><div><h2>Plant Categories</h2><p>Explore plants by their common uses and characteristics.</p></div></div>
+ <div class="tip-grid">
+  <div class="tip"><div class="emoji">🌿</div><b>Medicinal Plants</b><p>Plants traditionally used in different systems of herbal knowledge. Examples include Tulsi, Neem and Aloe Vera.</p><button class="link-btn" onclick="filterAndShow('Medicinal')">Explore plants →</button></div>
+  <div class="tip"><div class="emoji">🌸</div><b>Aromatic Plants</b><p>Plants known for their fragrant leaves, flowers or essential oils. Examples include Lavender and Rosemary.</p><button class="link-btn" onclick="filterAndShow('Aromatic')">Explore plants →</button></div>
+  <div class="tip"><div class="emoji">🍃</div><b>Culinary Herbs</b><p>Plants used to add flavour and aroma to food. Examples include Mint, Ginger and Curry Leaves.</p><button class="link-btn" onclick="filterAndShow('Culinary')">Explore plants →</button></div>
+  <div class="tip"><div class="emoji">🌺</div><b>Garden Plants</b><p>Plants grown in gardens for flowers, leaves, biodiversity and traditional interest.</p><button class="link-btn" onclick="filterAndShow('Garden')">Explore plants →</button></div>
+  <div class="tip"><div class="emoji">📜</div><b>Traditional Plants</b><p>Plants with a long history of use in traditional practices and local knowledge.</p><button class="link-btn" onclick="filterAndShow('Traditional')">Explore plants →</button></div>
+  <div class="tip"><div class="emoji">🌍</div><b>Plant Conservation</b><p>Protect native species, grow responsibly and avoid harvesting threatened wild plants.</p><button class="link-btn" onclick="showPage('safety')">Learn more →</button></div>
+ </div>
+</section>
+
+<section class="page" id="growing">
+ <div class="section-head"><div><h2>Herbal Plant Growing Guide</h2><p>Basic gardening tips for growing healthy plants.</p></div></div>
+ <div class="tip-grid">
+  <div class="tip"><div class="emoji">☀️</div><b>Sunlight</b><p>Check the light requirements of each plant. Some herbs prefer full sunlight while others grow well in partial shade.</p></div>
+  <div class="tip"><div class="emoji">💧</div><b>Watering</b><p>Water according to the plant and soil condition. Avoid keeping roots constantly waterlogged.</p></div>
+  <div class="tip"><div class="emoji">🪴</div><b>Healthy Soil</b><p>Use suitable, well-draining soil and containers with drainage holes where needed.</p></div>
+  <div class="tip"><div class="emoji">🌱</div><b>Propagation</b><p>Depending on the species, plants may grow from seeds, cuttings, bulbs or divisions.</p></div>
+  <div class="tip"><div class="emoji">✂️</div><b>Pruning</b><p>Remove damaged leaves and trim plants carefully using clean gardening tools.</p></div>
+  <div class="tip"><div class="emoji">🐝</div><b>Biodiversity</b><p>Encourage pollinators and use responsible, low-impact gardening practices.</p></div>
+ </div>
+ <div class="feature" style="margin-top:17px"><h3>🌳 Start a small herbal garden</h3><p>Choose plants suitable for your climate and available space. Begin with a few familiar herbs, label each plant correctly and learn its care requirements before expanding your garden.</p></div>
+</section>
+
+<section class="page" id="safety">
+ <div class="section-head"><div><h2>Herbal Safety Awareness</h2><p>Natural does not always mean safe.</p></div></div>
+ <div class="feature"><h3>🛡️ Use herbal knowledge responsibly</h3><p>Herbal plants can contain active substances. Safety depends on the exact species, plant part, preparation, amount, health conditions and medicines a person takes. Do not use a plant as a substitute for professional medical care.</p></div>
+ <div class="tip-grid">
+  <div class="tip"><div class="emoji">🔍</div><b>Correct Identification</b><p>Some plants look alike. Confirm the plant's identity before handling or using it.</p></div>
+  <div class="tip"><div class="emoji">💊</div><b>Medicine Interactions</b><p>Herbal products may interact with prescription or over-the-counter medicines.</p></div>
+  <div class="tip"><div class="emoji">🤰</div><b>Pregnancy & Children</b><p>Extra caution is needed. Do not assume herbal products are safe for everyone.</p></div>
+  <div class="tip"><div class="emoji">⚠️</div><b>Allergies</b><p>Plants and plant products may cause allergic reactions or skin irritation.</p></div>
+  <div class="tip"><div class="emoji">🏥</div><b>Medical Advice</b><p>Ask a qualified healthcare professional before using herbs for health purposes.</p></div>
+  <div class="tip"><div class="emoji">🌱</div><b>Responsible Harvesting</b><p>Avoid unknown plants and do not collect protected or endangered species.</p></div>
+ </div>
+</section>
+
+<section class="page" id="about">
+ <div class="section-head"><div><h2>About Herbalia</h2><p>A student mini project for herbal plant knowledge and awareness.</p></div></div>
+ <div class="hero" style="margin-bottom:18px"><div class="hero-copy"><div class="eyebrow">OUR EDUCATIONAL PROJECT</div><h2>Learn from Nature.<br>Respect Every Plant.</h2><p>Herbalia is an educational plant encyclopedia designed to introduce common herbal plants and encourage responsible awareness of traditional plant knowledge.</p></div><div class="hero-art">🌳</div></div>
+ <div class="about-grid">
+  <div class="panel"><h3>🎯 Project Objective</h3><p>To provide simple information about herbal plants, botanical names, traditional uses, plant parts and growing conditions.</p></div>
+  <div class="panel"><h3>📚 Project Coverage</h3><p>Plant profiles, categories, search, gardening tips, safety awareness and conservation.</p></div>
+  <div class="panel"><h3>💻 Technologies Used</h3><p>HTML for structure, CSS for styling and responsive layout, JavaScript for search, filters and interactive plant profiles. GitHub Pages for hosting.</p></div>
+  <div class="panel"><h3>⚕️ Disclaimer</h3><p>This is an educational student project. It does not provide medical advice, diagnosis or treatment recommendations.</p></div>
+ </div>
+</section>
+
+<footer class="footer"><span>© 2026 Herbalia | Student Mini Project</span><span>Explore • Learn • Protect Nature 🌿</span></footer>
+</main>
+</div>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+ <div class="modal-box">
+  <button class="close" onclick="closeModal()">✕</button>
+  <img class="modal-img" id="modalImg" alt="Herbal plant">
+  <div class="modal-content">
+   <div class="category" id="modalCategory"></div>
+   <h2 id="modalName"></h2><div class="scientific" id="modalScientific"></div>
+   <h3>Plant Description</h3><p id="modalDescription"></p>
+   <h3>Traditional Uses & Awareness</h3><p id="modalUses"></p>
+   <h3>Parts Commonly Used</h3><p id="modalParts"></p>
+   <h3>Growing Information</h3><p id="modalGrowing"></p>
+   <h3>Safety Note</h3><p id="modalSafety"></p>
+  </div>
+ </div>
+</div>
+
+<script>
+const plants=[
+{name:"Tulsi",sci:"Ocimum tenuiflorum",cat:"Medicinal",desc:"A fragrant herb widely grown in Indian home gardens, known for its aromatic leaves.",uses:"Leaves are traditionally used in household herbal preparations and cultural practices.",parts:"Leaves and flowering tops.",grow:"Warm climate, sunlight and well-drained soil.",safety:"Herbal preparations may interact with medicines. Avoid self-treatment.",img:"https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=700"},
+{name:"Neem",sci:"Azadirachta indica",cat:"Traditional",desc:"A tropical evergreen tree valued in traditional knowledge and local landscapes.",uses:"Different parts have a history of traditional use; neem is also known for its role in traditional plant care.",parts:"Leaves, bark, seeds and oil are
